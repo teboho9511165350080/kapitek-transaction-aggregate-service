@@ -8,17 +8,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.domain.dto.AggregateResponseDTO;
 
 @RestController
+@RequiredArgumentConstructor
 @RequestMapping("/transactions/")
 public class AggregateCategorizedTransactionController {
 
-    private final Transaction
+    private final TransactionAggregationService transactionAggregationService;
 
     @GetMapping("/account/{accountNumber}/aggregated/months/{months}")
     public ResponseEntity<AggregateResponseDTO> getRecentAggregatedTransactions(
             @PathVariable String accountNumber,
             @PathVariable int months) {
 
-        AggregateResponseDTO response = aggregationService.getRecentAggregatedTransactions(accountNumber, months);
+        AggregateResponseDTO response = transactionAggregationService.getRecentAggregatedTransactions(accountNumber, months);
 
         return ResponseEntity.ok(response);
     }

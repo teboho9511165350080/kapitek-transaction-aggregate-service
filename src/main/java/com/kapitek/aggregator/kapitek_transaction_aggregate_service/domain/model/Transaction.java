@@ -15,14 +15,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Transaction {
-    private String id;
-
+    private String transactionId;
+    private String accountNumber;
     private BigDecimal amount;
-
     private LocalDateTime bookingDate;
-
-    private String description;
-
-    @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
+    private Direction direction;
 }
