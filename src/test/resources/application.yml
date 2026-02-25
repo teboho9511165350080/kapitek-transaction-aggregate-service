@@ -1,29 +1,11 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:transactionsDB
-    driver-class-name: org.h2.Driver
-    username: kapitek
-    password: kapitek
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8080/realms/tx-aggregate-categorize-service
-          jwk-set-uri: http://localhost:8080/realms/tx-aggregate-categorize-service/protocol/openid-connect/certs
+  main:
+    lazy-initialization: true
 
 kapitek:
   customer:
     info:
-      url: http://localhost:8081/kapitek-cif/info
+      url: http://localhost:8091/kapitek-cif/info
       auth:
         client-id: kapitek-tx-aggregate-categorize-service
         client-secret: kapitek-tx-aggregate-categorize-service
@@ -38,15 +20,15 @@ kapitek:
           client-secret: kapitek-tx-aggregate-categorize-service
           grant-type: client_credentials
           url: http://localhost:8080/realms/payments-gateway/protocol/openid-connect/token
-        url: http://localhost:8081/kapitek-account/transactions
+        url: http://localhost:8091/kapitek-account/transactions
       card:
         auth:
           client-id: kapitek-tx-aggregate-categorize-service
           client-secret: kapitek-tx-aggregate-categorize-service
           grant-type: client_credentials
           url: http://localhost:8080/realms/payments-gateway/protocol/openid-connect/token
-        url: http://localhost:8081/kapitek-card/transactions
+        url: http://localhost:8091/kapitek-card/transactions
 
 
 server:
-  port: 8082
+  port: 9080

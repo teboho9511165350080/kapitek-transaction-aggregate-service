@@ -1,5 +1,11 @@
 package com.kapitek.aggregator.kapitek_transaction_aggregate_service.domain.model;
 
-public class CardTransaction extends Transaction{
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+
+@Getter
+@SuperBuilder
+public class CardTransaction extends Transaction {
     private String mcc;
+    private String cardNumber;
 }
