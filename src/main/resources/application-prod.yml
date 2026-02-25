@@ -17,18 +17,18 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/tx-aggregate-categorize-service
-          jwk-set-uri: http://localhost:8080/realms/tx-aggregate-categorize-service/protocol/openid-connect/certs
+          issuer-uri: http://keycloak:8080/realms/tx-aggregate-categorize-service
+          jwk-set-uri: http://keycloak:8080/realms/tx-aggregate-categorize-service/protocol/openid-connect/certs
 
 kapitek:
   customer:
     info:
-      url: http://localhost:8081/kapitek-cif/info
+      url: http://multiple-mock-transactions-services:8080/kapitek-cif/info
       auth:
         client-id: kapitek-tx-aggregate-categorize-service
         client-secret: kapitek-tx-aggregate-categorize-service
         grant-type: client_credentials
-        url: http://localhost:8080/realms/payments-gateway/protocol/openid-connect/token
+        url: http://keycloak:8080/realms/payments-gateway/protocol/openid-connect/token
 
   datasource:
     transaction:
@@ -37,16 +37,12 @@ kapitek:
           client-id: kapitek-tx-aggregate-categorize-service
           client-secret: kapitek-tx-aggregate-categorize-service
           grant-type: client_credentials
-          url: http://localhost:8080/realms/payments-gateway/protocol/openid-connect/token
-        url: http://localhost:8081/kapitek-account/transactions
+          url: http://keycloak:8080/realms/payments-gateway/protocol/openid-connect/token
+        url: http://multiple-mock-transactions-services:8080/kapitek-account/transactions
       card:
         auth:
           client-id: kapitek-tx-aggregate-categorize-service
           client-secret: kapitek-tx-aggregate-categorize-service
           grant-type: client_credentials
-          url: http://localhost:8080/realms/payments-gateway/protocol/openid-connect/token
-        url: http://localhost:8081/kapitek-card/transactions
-
-
-server:
-  port: 8082
+          url: http://keycloak:8080/realms/payments-gateway/protocol/openid-connect/token
+        url: http://multiple-mock-transactions-services:8080/kapitek-card/transactions

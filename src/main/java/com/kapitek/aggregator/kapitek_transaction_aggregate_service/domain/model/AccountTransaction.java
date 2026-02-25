@@ -1,5 +1,10 @@
 package com.kapitek.aggregator.kapitek_transaction_aggregate_service.domain.model;
 
-public class AccountTransaction extends Transaction{
-    private String description;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+
+@Getter
+@SuperBuilder
+public class AccountTransaction extends Transaction {
+    private String accountNumber;
 }
