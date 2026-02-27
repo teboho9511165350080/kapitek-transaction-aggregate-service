@@ -3,6 +3,7 @@ package com.kapitek.aggregator.kapitek_transaction_aggregate_service.application
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.model.response.AggregateResponse;
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.model.response.CategorizedAppTransaction;
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.domain.model.CategorizedTransaction;
+import com.kapitek.aggregator.kapitek_transaction_aggregate_service.domain.model.CategorizedTransactionSummary;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,14 @@ public class AggregateResponseMapper {
     public static AggregateResponse mapToAggregateResponse(List<CategorizedTransaction> transactions) {
         return AggregateResponse.builder()
                 .transactions(mapToCategorizedTransactions(transactions))
+                .build();
+    }
+
+    public static AggregateResponse mapToAggregateResponse(List<CategorizedTransaction> categorizedTransaction,
+                                                           CategorizedTransactionSummary summary) {
+        return AggregateResponse.builder()
+                .transactions(mapToCategorizedTransactions(categorizedTransaction))
+                .summary(summary)
                 .build();
     }
 
