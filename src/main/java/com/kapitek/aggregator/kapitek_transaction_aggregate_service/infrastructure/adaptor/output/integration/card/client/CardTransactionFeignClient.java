@@ -2,6 +2,7 @@ package com.kapitek.aggregator.kapitek_transaction_aggregate_service.infrastruct
 
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.infrastructure.adaptor.output.integration.card.dto.CardTransactionDTO;
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.infrastructure.adaptor.output.integration.card.dto.CardTransactionRequestDTO;
+import com.kapitek.aggregator.kapitek_transaction_aggregate_service.infrastructure.adaptor.output.integration.config.FeignErrorDecoder;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +13,8 @@ import java.util.Map;
 
 @FeignClient(
         name = "kapitek-card-transactions-feign-client",
-        url = "${kapitek.datasource.transaction.card.url}"
+        url = "${kapitek.datasource.transaction.card.url}",
+        configuration = FeignErrorDecoder.class
 )
 public interface CardTransactionFeignClient {
     @PostMapping(

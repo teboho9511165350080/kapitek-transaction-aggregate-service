@@ -41,7 +41,8 @@ public class AccountTransactionFetcherAdaptor implements TransactionSourcePort<A
     public List<AccountTransaction> fetchTransactions(String customerInfoFileKey) {
 
         List<AccountTransactionDTO> allCustomerAccountsTransactions = new ArrayList<>();
-        CustomerInfoFile customerInfoFile = customerInfoPort.getFileLinkedToCustomerInfoKey(customerInfoFileKey);
+
+            CustomerInfoFile customerInfoFile = customerInfoPort.getFileLinkedToCustomerInfoKey(customerInfoFileKey);
 
         if (Objects.nonNull(customerInfoFile) && Objects.nonNull(customerInfoFile.getAccounts())) {
             String chequeAccountNumber = customerInfoFile.getAccounts().getChequeAccountNumber();

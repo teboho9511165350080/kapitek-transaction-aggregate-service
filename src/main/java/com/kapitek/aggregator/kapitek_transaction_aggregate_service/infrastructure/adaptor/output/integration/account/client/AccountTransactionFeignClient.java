@@ -2,6 +2,7 @@ package com.kapitek.aggregator.kapitek_transaction_aggregate_service.infrastruct
 
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.infrastructure.adaptor.output.integration.account.dto.AccountTransactionDTO;
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.infrastructure.adaptor.output.integration.account.dto.AccountTransactionRequestDTO;
+import com.kapitek.aggregator.kapitek_transaction_aggregate_service.infrastructure.adaptor.output.integration.config.FeignErrorDecoder;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +13,8 @@ import java.util.Map;
 
 @FeignClient(
         name = "kapitek-account-transactions-feign-client",
-        url = "${kapitek.datasource.transaction.account.url}"
+        url = "${kapitek.datasource.transaction.account.url}",
+        configuration =  FeignErrorDecoder.class
 )
 public interface AccountTransactionFeignClient {
     @PostMapping(
