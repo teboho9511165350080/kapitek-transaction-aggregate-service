@@ -7,8 +7,10 @@ import com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.port.output.TransactionSourcePort;
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.port.output.TransactionStoragePort;
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.domain.model.CategorizedTransaction;
+import com.kapitek.aggregator.kapitek_transaction_aggregate_service.domain.model.CategorizedTransactionSummary;
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.domain.model.Transaction;
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.domain.service.categorize.TransactionCategorizationService;
+import com.kapitek.aggregator.kapitek_transaction_aggregate_service.domain.service.summary.CategorizedTransactionSummaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ public class TransactionAggregationService implements TransactionAggregationUseC
 
     private final List<TransactionCategorizationService> transactionCategorizationServices;
 
+    private final CategorizedTransactionSummaryService categorizedTransactionSummaryService;
+
     private final TransactionStoragePort transactionStoragePort;
 
     @Override
@@ -31,8 +35,10 @@ public class TransactionAggregationService implements TransactionAggregationUseC
         List<CategorizedTransaction> filterCategorizedTransactions = getCategorizedTransactions(
                 customerInfoFileKey, LocalDate.now().minusMonths(months), LocalDate.now());
 
-        //TODO: Add more insight to display summary of transactions showing money summary, expenses summary e.t.c
-        return AggregateResponseMapper.mapToAggregateResponse(filterCategorizedTransactions);
+        CategorizedTransactionSummary summary = categorizedTransactionSummaryService
+                .processCategorizedTransactionSummary(filterCategorizedTransactions);
+
+        return AggregateResponseMapper.mapToAggregateResponse(filterCategorizedTransactions, summary);
     }
 
     @Override
@@ -51,8 +57,10 @@ public class TransactionAggregationService implements TransactionAggregationUseC
                 aggregateRequest.getEndDate()
         );
 
-        //TODO: Add more insight to display summary of transactions showing money summary, expenses summary e.t.c
-        return AggregateResponseMapper.mapToAggregateResponse(filterCategorizedTransactions);
+        CategorizedTransactionSummary summary = categorizedTransactionSummaryService
+                .processCategorizedTransactionSummary(filterCategorizedTransactions);
+
+        return AggregateResponseMapper.mapToAggregateResponse(filterCategorizedTransactions, summary);
     }
 
     @Override
