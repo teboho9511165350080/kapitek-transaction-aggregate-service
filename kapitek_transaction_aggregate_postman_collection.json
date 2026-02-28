@@ -1,0 +1,216 @@
+{
+	"info": {
+		"_postman_id": "d831b5ec-dbc8-40c6-8615-9a4d7aace442",
+		"name": "Kapitek-Aggregate-Categorize-Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24173171"
+	},
+	"item": [
+		{
+			"name": "filter by month",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TX_AGGREGATE_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{KAPITEK_TX_AGGREGATE_SERVICE_BASE_URL}}/transactions/account/{{cifKey}}/aggregated/months/{{months}}",
+					"host": [
+						"{{KAPITEK_TX_AGGREGATE_SERVICE_BASE_URL}}"
+					],
+					"path": [
+						"transactions",
+						"account",
+						"{{cifKey}}",
+						"aggregated",
+						"months",
+						"{{months}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filter by month with summary",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TX_AGGREGATE_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{KAPITEK_TX_AGGREGATE_SERVICE_BASE_URL}}/transactions/account/{{cifKey}}/aggregated-summary/months/{{months}}",
+					"host": [
+						"{{KAPITEK_TX_AGGREGATE_SERVICE_BASE_URL}}"
+					],
+					"path": [
+						"transactions",
+						"account",
+						"{{cifKey}}",
+						"aggregated-summary",
+						"months",
+						"{{months}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "between dates",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TX_AGGREGATE_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customerInfoFileKey\": \"{{cifKey}}\",\n    \"startDate\": \"2025-12-12T00:00:00\",\n    \"endDate\": \"2026-02-22T23:59:59\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{KAPITEK_TX_AGGREGATE_SERVICE_BASE_URL}}/transactions/aggregated",
+					"host": [
+						"{{KAPITEK_TX_AGGREGATE_SERVICE_BASE_URL}}"
+					],
+					"path": [
+						"transactions",
+						"aggregated"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "between dates with summary",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{TX_AGGREGATE_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customerInfoFileKey\": \"{{cifKey}}\",\n    \"startDate\": \"2026-02-24T20:00:00\",\n    \"endDate\": \"2026-02-24T23:59:59\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{KAPITEK_TX_AGGREGATE_SERVICE_BASE_URL}}/transactions/aggregated-summary",
+					"host": [
+						"{{KAPITEK_TX_AGGREGATE_SERVICE_BASE_URL}}"
+					],
+					"path": [
+						"transactions",
+						"aggregated-summary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ACCESS_TOKEN",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();",
+							"",
+							"pm.environment.set(\"TX_AGGREGATE_TOKEN\", response.access_token);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "kapitek-mobile-app",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "kapitek-mobile-app",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{KEY_CLOAK_BASE_URL}}/realms/tx-aggregate-categorize-service/protocol/openid-connect/token",
+					"host": [
+						"{{KEY_CLOAK_BASE_URL}}"
+					],
+					"path": [
+						"realms",
+						"tx-aggregate-categorize-service",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
