@@ -363,6 +363,26 @@ Each category contains calculated totals for the specified time range.
 
 ---
 
+## BASE URL NEEDED TO COMMUNICATE & LOGIN TO SPECIFIC USED SERVICES
+### Keycloak
+1. Base url: localhost:8080
+2. Postman placeholder -> {{KEY_CLOAK_BASE_URL}} -> localhost:8080
+
+### Kapitek Core Banking (Sort of a gateway for Exposing Account Service, Card Service & and Customer Info File Service)
+1. Base url: **localhost:8081**
+2. Postman placeholder -> {{KAPITEK_ACCOUNT_SERVICE_BASE_URL}} -> localhost:8081
+
+### Kapitek Tansaction Aggregate & Categorize service
+1. Base url: **localhost:8082**
+2. Postman placeholder -> {{KAPITEK_TX_AGGREGATE_SERVICE_BASE_URL}} -> localhost:8082
+
+### Kapitek Secrets Vault
+1. Base url: **localhost:8200** (for login in to UI purpose and manage secrets. On docker the applications connect using the vault container name **vault**)
+2. Token: **root** (This is also for vault UI secrets management. The The method on login should be Token, then provide the token provide.)
+
+### Aggregate Service H2 Database Access
+1. 
+
 ## 📖 API Documentation
 
 For complete endpoint documentation, detailed request/response schemas, and additional examples, refer to the Swagger UI available once all services are running.
