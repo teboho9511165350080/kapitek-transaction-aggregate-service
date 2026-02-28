@@ -380,6 +380,9 @@ Each category contains calculated totals for the specified time range.
 1. Base url: **localhost:8200** (for login in to UI purpose and manage secrets. On docker the applications connect using the vault service name **vault**)
 2. Token: **root** (This is also for vault UI secrets management. The The method on login should be **Token**, then provide the token provide.)
 
+### Open Api (Swagger Documentation)
+1. Url: http://localhost:8082/swagger-ui/index.html
+
 ### Aggregate Service H2 Database Access
 1. Base url: **localhost:8082/h2/console**
 2. Free access no Beaurer auth required. You just need to know the username and password of the h2 in dababase)
