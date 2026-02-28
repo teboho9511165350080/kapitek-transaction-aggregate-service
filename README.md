@@ -112,3 +112,258 @@ This service enables:
 - Improve categorization rules using ML models
 - Add pagination and filtering capabilities
 - Introduce caching for performance optimization
+
+
+## 🚀 Setup To Run The Application
+
+### 🐳 Docker Compose Setup
+
+The **kapitek-transaction-aggregate-service** is not a standalone service.  
+It depends on multiple external services that must run together for the system to function correctly.
+
+### 🔗 Service Dependencies
+
+- **kapitek-vendor-mock-service**
+  - CIF (Customer Info File) service  
+  - Accounts service  
+  - Cards service  
+
+- **Keycloak**
+  - Used for JWT authentication and token validation  
+  - Runs in **PROD mode**, therefore requires its own PostgreSQL database  
+
+- **PostgreSQL**
+  - Database for Keycloak  
+  - Database for mock services  
+  - Database for the core banking service  
+
+- **Vault**
+  - Manages and protects secrets used by:
+    - aggregate-service  
+    - mock services  
+
+All required dependencies are configured in the `docker-compose.yml` file located in the root directory of the **kapitek-transaction-aggregate-service** Spring Boot application.
+
+---
+
+### ✅ Prerequisites
+
+Make sure you have:
+
+- Docker installed
+- Docker Compose installed
+
+---
+
+### ▶️ Start The Environment
+
+From the root directory of the project, run:
+
+```bash
+docker compose up -d
+```
+
+Or from another location:
+
+```bash
+docker compose -f <path-to-docker-compose>/docker-compose.yml up -d
+```
+
+Docker will:
+
+- Pull the required images  
+- Build containers  
+- Start services in dependency order  
+
+Once completed, all services will be running and ready for testing.
+
+---
+
+## 🧪 Testing The Application
+
+Comprehensive Swagger (OpenAPI) documentation is available for:
+
+- **kapitek-transaction-aggregate-service**
+- **kapitek-vendor-mock-service**
+
+---
+
+## 🏦 Step 1 — Create a Mock Customer (CIF)
+
+Before performing transaction aggregation, a customer must exist in **Kapitek Bank**.
+
+Use the CIF service to create a mock customer.
+
+### **Create Mock Customer Request**
+
+```bash
+curl --location 'http://localhost:8081/kapitek-cif/create' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <TOKEN>' \
+--data '{
+  "identityNumber": "9611270905081",
+  "isChequesAccountRequired": "YES",
+  "isSavingsAccountRequired": "NO",
+  "isCreditCardRequired": "YES",
+  "isPrepaidCardRequired": "NO"
+}'
+```
+
+### **Create Mock Customer Response**
+
+```json
+{
+  "customerInfoFileKey": "d68b5116-1cd8-4da5-a401-017538f0ec3a",
+  "identityNumber": "9611270905081",
+  "accounts": {
+    "chequeAccountNumber": "3376734877",
+    "savingsAccountNumber": null
+  },
+  "cards": {
+    "creditCardNumber": "2165178172740537",
+    "prePaidCardNumber": null
+  }
+}
+```
+
+> ⚠️ Save the `customerInfoFileKey`. It is required for transaction aggregation.
+
+---
+
+## 💳 Step 2 — Add Mock Transactions
+
+After creating the customer, generate mock transactions for accounts and/or cards.
+
+### **Add Account Mock Transactions Request**
+
+```bash
+curl --location 'http://localhost:8081/kapitek-account/transactions/create' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <TOKEN>' \
+--data '{
+  "accountNumber": "3376734877",
+  "totalNumberOfOutGoingTransactions": 2,
+  "totalNumberOfIncomingTransactions": 2,
+  "rangeBetweenStartDate": "2024-01-01T00:00:00",
+  "rangeBetweenEndDate": "2026-02-24T23:59:59"
+}'
+```
+
+---
+
+### **Add Card Mock Transactions Request**
+
+```bash
+curl --location 'http://localhost:8081/kapitek-card/transactions/create' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer <TOKEN>' \
+--data '{
+  "cardNumber": "2165178172740537",
+  "totalNumberOfOutGoingTransactions": 2,
+  "totalNumberOfIncomingTransactions": 2,
+  "rangeBetweenStartDate": "2024-01-01T00:00:00",
+  "rangeBetweenEndDate": "2026-02-24T23:59:59"
+}'
+```
+
+If successful, the service returns:
+
+```json
+true
+```
+
+---
+
+## 📊 Step 3 — Retrieve Aggregated & Categorized Transactions
+
+Once:
+
+- The customer exists  
+- Transactions have been created  
+
+You can retrieve aggregated and categorized transactions using the `customerInfoFileKey`.
+
+---
+
+### **Get Aggregate Categorized Transactions Request**
+
+```bash
+curl --location 'http://localhost:8082/transactions/account/{customerInfoFileKey}/aggregated/months/12' \
+--header 'Authorization: Bearer <TOKEN>'
+```
+
+### **Get Aggregate Categorized Transactions Response**
+
+```json
+{
+  "transactions": [
+    {
+      "date": "2025-06-30",
+      "description": "Cash Deposit: Shaunda Santo Domingo",
+      "category": "Cash Deposit",
+      "moneyIn": "2955.9800",
+      "moneyOut": "0",
+      "fee": 0.0000
+    },
+    {
+      "date": "2025-06-22",
+      "description": "Payment Received: Shanon Wunsch",
+      "category": "Other Income",
+      "moneyIn": "6714.4200",
+      "moneyOut": "0",
+      "fee": 0.0000
+    }
+  ],
+  "summary": null
+}
+```
+
+---
+
+### **Get Aggregate Categorized Transactions With Summary Request**
+
+```bash
+curl --location 'http://localhost:8082/transactions/account/{customerInfoFileKey}/aggregated-summary/months/24' \
+--header 'Authorization: Bearer <TOKEN>'
+```
+
+### **Get Aggregate Categorized Transactions With Summary Response**
+
+```json
+{
+  "transactions": [
+    {
+      "date": "2025-06-30",
+      "description": "Cash Deposit: Shaunda Santo Domingo",
+      "category": "Cash Deposit",
+      "moneyIn": "2955.9800",
+      "moneyOut": "0",
+      "fee": 0.0000
+    }
+  ],
+  "summary": {
+    "moneyInSummary": {
+      "Interest": 6863.1400,
+      "Cash Deposit": 2955.9800,
+      "Other Income": 6714.4200
+    },
+    "moneyOutSummary": {
+      "Cash Withdrawal": 6339.4600,
+      "Digital Payment": 9022.4700
+    }
+  }
+}
+```
+
+The **summary section** groups transactions into:
+
+- **Money In**
+- **Money Out**
+
+Each category contains calculated totals for the specified time range.
+
+---
+
+## 📖 API Documentation
+
+For complete endpoint documentation, detailed request/response schemas, and additional examples, refer to the Swagger UI available once all services are running.
