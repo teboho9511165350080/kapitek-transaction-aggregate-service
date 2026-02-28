@@ -377,11 +377,14 @@ Each category contains calculated totals for the specified time range.
 2. Postman placeholder -> {{KAPITEK_TX_AGGREGATE_SERVICE_BASE_URL}} -> localhost:8082
 
 ### Kapitek Secrets Vault
-1. Base url: **localhost:8200** (for login in to UI purpose and manage secrets. On docker the applications connect using the vault container name **vault**)
-2. Token: **root** (This is also for vault UI secrets management. The The method on login should be Token, then provide the token provide.)
+1. Base url: **localhost:8200** (for login in to UI purpose and manage secrets. On docker the applications connect using the vault service name **vault**)
+2. Token: **root** (This is also for vault UI secrets management. The The method on login should be **Token**, then provide the token provide.)
 
 ### Aggregate Service H2 Database Access
-1. 
+1. Base url: **localhost:8082/h2/console**
+2. Free access no Beaurer auth required. You just need to know the username and password of the h2 in dababase)
+3. **H2 Username**: kapitek
+4. **H2 Password**: kapitek
 
 ## 📖 API Documentation
 
