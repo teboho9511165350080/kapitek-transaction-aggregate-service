@@ -1,0 +1,96 @@
+version: "3.9"
+
+services:
+  postgres:
+      image: postgres:15
+      container_name: kapitek-postgres
+      restart: always
+      environment:
+        POSTGRES_DB: kapitek-core-banking
+        POSTGRES_USER: kapitek
+        POSTGRES_PASSWORD: kapitek
+      ports:
+        - "5432:5432"
+      volumes:
+        - postgres_core_data:/var/lib/postgresql/data
+      networks:
+        - kapitek-net
+
+  postgres-keycloak:
+    image: postgres:15
+    container_name: postgres-keycloak
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    volumes:
+      - postgres_keycloak_data:/var/lib/postgresql/data
+    networks:
+      - kapitek-net
+
+  keycloak:
+    image: generalblcom/kapitek-keycloak:latest
+    container_name: kapitek-keycloak
+    ports:
+      - "8080:8080"
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres-keycloak
+      KC_DB_URL_DATABASE: keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_BOOTSTRAP_ADMIN_USERNAME: kapitek-admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: kapitek-admin
+      KC_HOSTNAME: keycloak
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT: false
+      KC_HTTP_ENABLED: true
+      KC_HEALTH_ENABLED: true
+      KC_METRICS_ENABLED: true
+    depends_on:
+      - postgres-keycloak
+    networks:
+      - kapitek-net
+
+
+  multiple-mock-transactions-services:
+    image: generalblcom/cards_and_accounts_mock_services
+    container_name: cards_and_accounts_mock_services
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    depends_on:
+      - keycloak
+      - postgres
+    networks:
+      - kapitek-net
+
+
+  aggregator-service:
+    image: generalblcom/kapitek-transaction-aggregate-service:latest
+    container_name: aggregator-service
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    depends_on:
+      - keycloak
+      - multiple-mock-transactions-services
+    networks:
+      - kapitek-net
+
+
+networks:
+  kapitek-net:
+    driver: bridge
+
+volumes:
+  postgres_core_data:
+    name: kapitek-core-postgres-data
+
+  postgres_keycloak_data:
+    name: kapitek-keycloak-postgres-data
+
