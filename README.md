@@ -114,14 +114,14 @@ This service enables:
 - Introduce caching for performance optimization
 
 
-## 🚀 Setup To Run The Application
+## Setup To Run The Application
 
-### 🐳 Docker Compose Setup
+### Docker Compose Setup
 
 The **kapitek-transaction-aggregate-service** is not a standalone service.  
 It depends on multiple external services that must run together for the system to function correctly.
 
-### 🔗 Service Dependencies
+### Service Dependencies
 
 - **kapitek-vendor-mock-service**
   - CIF (Customer Info File) service  
@@ -135,7 +135,6 @@ It depends on multiple external services that must run together for the system t
 - **PostgreSQL**
   - Database for Keycloak  
   - Database for mock services  
-  - Database for the core banking service  
 
 - **Vault**
   - Manages and protects secrets used by:
