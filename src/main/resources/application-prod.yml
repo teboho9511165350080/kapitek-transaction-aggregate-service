@@ -1,9 +1,21 @@
 spring:
+  config:
+    import: "vault://"
+  cloud:
+    vault:
+      host: vault
+      port: 8200
+      scheme: http
+      token: root
+      kv:
+        enabled: true
+        backend: secret
+        default-context: tx-aggregate-categorize-service
   datasource:
     url: jdbc:h2:mem:transactionsDB
     driver-class-name: org.h2.Driver
-    username: kapitek
-    password: kapitek
+    username: ${H2_DB_USER}
+    password: ${H2_DB_PASSWORD}
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
@@ -25,8 +37,8 @@ kapitek:
     info:
       url: http://multiple-mock-transactions-services:8080/kapitek-cif/info
       auth:
-        client-id: kapitek-tx-aggregate-categorize-service
-        client-secret: kapitek-tx-aggregate-categorize-service
+        client-id: ${CIF_CLIENT_ID}
+        client-secret: ${CIF_CLIENT_SECRET}
         grant-type: client_credentials
         url: http://keycloak:8080/realms/payments-gateway/protocol/openid-connect/token
 
@@ -34,15 +46,15 @@ kapitek:
     transaction:
       account:
         auth:
-          client-id: kapitek-tx-aggregate-categorize-service
-          client-secret: kapitek-tx-aggregate-categorize-service
+          client-id: ${ACCOUNT_SERVICE_CLIENT_ID}
+          client-secret: ${ACCOUNT_SERVICE_CLIENT_SECRET}
           grant-type: client_credentials
           url: http://keycloak:8080/realms/payments-gateway/protocol/openid-connect/token
         url: http://multiple-mock-transactions-services:8080/kapitek-account/transactions
       card:
         auth:
-          client-id: kapitek-tx-aggregate-categorize-service
-          client-secret: kapitek-tx-aggregate-categorize-service
+          client-id: ${CARD_SERVICE_CLIENT_ID}
+          client-secret: ${CARD_SERVICE_CLIENT_SECRET}
           grant-type: client_credentials
           url: http://keycloak:8080/realms/payments-gateway/protocol/openid-connect/token
         url: http://multiple-mock-transactions-services:8080/kapitek-card/transactions

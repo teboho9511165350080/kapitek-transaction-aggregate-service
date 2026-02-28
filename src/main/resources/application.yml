@@ -1,3 +1,9 @@
 spring:
   application:
     name: kapitek-transaction-aggregate-service
+
+logging:
+  level:
+    org.springframework.vault: DEBUG
+    org.springframework.web.client.RestTemplate: DEBUG
+
