@@ -1,4 +1,4 @@
-package com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.exeption;
+package com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

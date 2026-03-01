@@ -17,7 +17,7 @@ public enum Category {
     FEES("Fees", Direction.DEBIT, List.of("fees", "fee", "charge", "charges")),
     INVESTMENT("Investment", Direction.DEBIT, List.of("ee deposit")),
     DEPOSIT ("Cash Deposit", Direction.CREDIT, List.of("cash deposit")),
-    WITHDRAWAL ("Cash Withdrawal", Direction.DEBIT, List.of("banking app cash sent")),
+    WITHDRAWAL ("Cash Withdrawal", Direction.DEBIT, List.of("banking app cash sent", "withdrawal")),
     INTEREST ("Interest", Direction.CREDIT, List.of("interest received"));
 
     private final String name;

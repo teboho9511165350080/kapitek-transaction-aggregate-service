@@ -1,4 +1,4 @@
-package com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.exeption;
+package com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.exception;
 
 import com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.exeption.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;

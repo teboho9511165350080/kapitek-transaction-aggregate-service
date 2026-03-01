@@ -1,6 +1,6 @@
 package com.kapitek.aggregator.kapitek_transaction_aggregate_service.infrastructure.adaptor.output.integration.config;
 
-import com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.exeption.DownstreamServiceException;
+import com.kapitek.aggregator.kapitek_transaction_aggregate_service.application.exception.DownstreamServiceException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import feign.Util;
