@@ -363,6 +363,34 @@ Each category contains calculated totals for the specified time range.
 
 ---
 
+## BASE URL NEEDED TO COMMUNICATE & LOGIN TO SPECIFIC USED SERVICES
+### Keycloak
+1. Base url: localhost:8080
+2. Postman placeholder -> {{KEY_CLOAK_BASE_URL}} -> localhost:8080
+3. **N.B** It is important to note that the **keycloak** docker image used was build ontop of the original keycloak docker image. The one use here has already imported the realms needed such that when the docker-compose build the container for this it already starts with build in realms (containing clients, theys respective service accounts and roles assigned to them) use by the services of the project. Therefore, it is must that the image set on the docker-compose.yml is used. The required is already pushed to the docker hub and has been set as public for easier pulling without requiring the owner docker hub credentials.
+
+### Kapitek Core Banking (Sort of a gateway for Exposing Account Service, Card Service & and Customer Info File Service)
+1. Base url: **localhost:8081**
+2. Postman placeholder -> {{KAPITEK_ACCOUNT_SERVICE_BASE_URL}} -> localhost:8081
+
+### Kapitek Tansaction Aggregate & Categorize service
+1. Base url: **localhost:8082**
+2. Postman placeholder -> {{KAPITEK_TX_AGGREGATE_SERVICE_BASE_URL}} -> localhost:8082
+
+### Kapitek Secrets Vault
+1. Base url: **localhost:8200** (for login in to UI purpose and manage secrets. On docker the applications connect using the vault service name **vault**)
+2. Token: **root** (This is also for vault UI secrets management. The The method on login should be **Token**, then provide the token provide.)
+3. **N.B** It is important to note that the **vault** docker image used was build ontop of the original vault docker image. The one use here has already imported the secrets needed such that when the docker-compose build the container for this it already starts with build in secrets use by the services of the project. Therefore, it is must that the image set on the docker-compose.yml is used. The required is already pushed to the docker hub and has been set as public for easier pulling without requiring the owner docker hub credentials. 
+
+### Open Api (Swagger Documentation)
+1. Url: http://localhost:8082/swagger-ui/index.html
+
+### Aggregate Service H2 Database Access
+1. Base url: **localhost:8082/h2/console**
+2. Free access no Beaurer auth required. You just need to know the username and password of the h2 in dababase)
+3. **H2 Username**: kapitek
+4. **H2 Password**: kapitek
+
 ## 📖 API Documentation
 
 For complete endpoint documentation, detailed request/response schemas, and additional examples, refer to the Swagger UI available once all services are running.
